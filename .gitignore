@@ -1,0 +1,25 @@
+# Build outputs
+/bin/
+/build_dir/
+/staging_dir/
+/tmp/
+/logs/
+/*.img
+/*.bin
+/*.tar
+/*.tar.gz
+/*.zip
+
+# Local secrets and credentials
+.env
+.env.*
+*.key
+*.pem
+*_secret*
+*_credentials*
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
