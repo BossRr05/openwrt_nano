@@ -1,0 +1,7 @@
+# Template identitas rilis; bukan konfigurasi build OpenWrt aktif.
+MAGICBOX_NAME="MAGICBOX OS"
+MAGICBOX_DEVICE="Xiaomi Redmi 5A"
+MAGICBOX_CODENAME="riva"
+MAGICBOX_CREDIT="Created by / Credit: Rahel"
+# Nilai ini harus diisi otomatis oleh proses build.
+MAGICBOX_BUILD_DATE="AUTO"
