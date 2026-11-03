@@ -1,12 +1,22 @@
 # Build helper scripts
 
-Skrip build belum dibuat karena versi basis OpenWrt, target, dan toolchain untuk Riva belum diverifikasi.
+## gen-release-info.sh
 
-Skrip yang direncanakan:
-- pemeriksaan dependensi host;
-- pencatatan versi source dan toolchain;
-- validasi konfigurasi target;
-- pembuatan metadata rilis dan build date;
-- pemeriksaan checksum artefak.
+Membuat metadata identitas rilis MAGICBOX OS pada waktu build.
 
-Setiap skrip harus aman dijalankan berulang, menjelaskan perubahan, dan tidak menulis ke perangkat fisik secara otomatis.
+Contoh:
+
+```sh
+MAGICBOX_VERSION=dev MAGICBOX_DEVICE=riva ./scripts/gen-release-info.sh ./out/etc/magicbox-release
+```
+
+Variabel yang dapat diatur:
+- `MAGICBOX_NAME`
+- `MAGICBOX_VERSION`
+- `MAGICBOX_DEVICE`
+- `MAGICBOX_CREDIT`
+- `MAGICBOX_BUILD_DATE` (otomatis UTC jika tidak diatur)
+
+Skrip ini hanya membuat file metadata. Skrip ini **tidak** mengompilasi firmware, memilih target OpenWrt, atau menulis ke perangkat.
+
+Skrip build lainnya baru akan ditambahkan setelah versi basis, target, dan toolchain Riva diverifikasi.
