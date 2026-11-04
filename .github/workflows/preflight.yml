@@ -1,0 +1,66 @@
+name: MAGICBOX repository preflight
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preflight-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-check:
+    name: Check project scaffold
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify required project documents
+        shell: bash
+        run: |
+          set -euo pipefail
+          required_files=(
+            README.md
+            docs/ROADMAP.md
+            docs/STATUS.md
+            docs/PLATFORM_RESEARCH.md
+            target/riva/README.md
+          )
+          for file in "${required_files[@]}"; do
+            if [[ ! -s "$file" ]]; then
+              echo "::error file=$file::Required project document is missing or empty"
+              exit 1
+            fi
+            echo "OK: $file"
+          done
+
+      - name: Check shell script syntax when scripts exist
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t scripts < <(find . -type f -name '*.sh' -not -path './.git/*' | sort)
+          if (("${#scripts[@]}" == 0)); then
+            echo "No shell scripts yet; skipping syntax check."
+            exit 0
+          fi
+          for script in "${scripts[@]}"; do
+            bash -n "$script"
+            echo "Shell syntax OK: $script"
+          done
+
+      - name: Confirm this is not marked as flash-ready
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! grep -Eiq 'belum (menjadi )?firmware siap-flash|belum ada firmware.*siap-flash|not.*flash-ready' docs/STATUS.md README.md; then
+            echo "::error::Status must clearly state that no validated flash-ready firmware exists."
+            exit 1
+          fi
+          echo "Safety status statement found."
